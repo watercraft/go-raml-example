@@ -1,0 +1,179 @@
+#%RAML 1.0
+title: Example
+version: v1
+baseUri: http://api.zebrium.com/api/{version}
+protocols: [ HTTPS ]
+mediaType: application/json
+securitySchemes:
+  Token:
+    description: |
+      Create session object to get token used for authenticated requests.
+    type: x-custom
+    describedBy:
+      headers:
+        X-Auth-Token:
+          description: |
+            Pass token in X-Auth-Token HTTP header.
+          type: string
+      responses:
+        401:
+          body:
+            application/json:
+            type: Error
+types:
+  Error:
+    properties:
+      code: integer
+      message: string
+      retryAfter:
+        type: integer
+        required: false
+      data:
+        type: object[]
+  Meta:
+    properties:
+      op:
+        enum: [ create, read, update, delete ]
+      data:
+        type: object[]
+      error:
+        type: Error
+      softwareRelease:
+        type: string
+  Object:
+    properties:
+      id:
+        type: string
+        required: false
+      createTime:
+        type: datetime
+        required: false
+      name:
+        type: string
+        pattern: "^[_a-zA-Z][_a-zA-Z0-9]{0\\\\,30}$"
+/object:
+  dataSource: "postgres/_object"
+  get:
+    securedBy: [ Token ]
+    description: List all objects matching query criteria, if provided;
+                 otherwise list all objects
+    queryParameters:
+      filter:
+      sort:
+      page[offset]:
+      page[limit]:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Object
+      500:
+        body:
+          application/json:
+            type: Meta
+  post:
+    securedBy: [ Token ]
+    description: Create a new object
+    body:
+      application/json:
+        type: Object
+    responses:
+      201:
+        body:
+          application/json:
+            type: Object
+      400:
+        body:
+          application/json:
+            type: Meta
+      409:
+        body:
+          application/json:
+            type: Meta
+      500:
+        body:
+          application/json:
+            type: Meta
+  put:
+    securedBy: [ Token ]
+    description: Create or update a object
+    body:
+      application/json:
+        type: Object
+    responses:
+      200:
+        body:
+          application/json:
+            type: Object
+      201:
+        body:
+          application/json:
+            type: Object
+      400:
+        body:
+          application/json:
+            type: Meta
+      409:
+        body:
+          application/json:
+            type: Meta
+      500:
+        body:
+          application/json:
+            type: Meta
+  /{id}:
+    put:
+      securedBy: [ Token ]
+      description: Update a object
+      body:
+        application/json:
+          type: Object
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+        400:
+          body:
+            application/json:
+              type: Meta
+        409:
+          body:
+            application/json:
+              type: Meta
+        500:
+          body:
+            application/json:
+              type: Meta
+    patch:
+      securedBy: [ Token ]
+      description: Update a object
+      body:
+        application/json:
+          type: Object
+      responses:
+        200:
+          body:
+            application/json:
+              type: Object
+        400:
+          body:
+            application/json:
+              type: Meta
+        409:
+          body:
+            application/json:
+              type: Meta
+        500:
+          body:
+            application/json:
+              type: Meta
+    delete:
+      securedBy: [ Token ]
+      description: Delete a object
+      responses:
+        200:
+        500:
+          body:
+            application/json:
+              type: Meta

@@ -1,0 +1,10 @@
+hash: efa73934a429e0a451d4eb6d8a8595e29164c73049faeaa4584f7bdafb9ab888
+updated: 2020-09-16T11:12:16.650660645-07:00
+imports:
+- name: github.com/gorilla/mux
+  version: 98cb6bf42e086f6af920b965c38cacc07402d51b
+- name: github.com/watercraft/validator
+  version: 0534b760150f6bb5410c9fa4c6bf15ae8144f5ad
+- name: gopkg.in/validator.v2
+  version: 2b28d334fa054977b7c725c7639a1ca4efc18bad
+testImports: []
